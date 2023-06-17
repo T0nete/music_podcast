@@ -9,7 +9,8 @@ module.exports = {
       publicPath: '/',
    },
    devServer: {
-      historyApiFallback: true
+      historyApiFallback: true,
+      open: true,
    },
    module: {
       rules: [
@@ -20,8 +21,12 @@ module.exports = {
          {
             test: /\.(png|j?g|svg|gif)?$/,
             use: 'file-loader'
-         }
-]
+         },
+         {
+            test: /\.css$/i,
+            use: ['style-loader', 'css-loader', 'postcss-loader'],
+          },
+      ]
    },
    plugins: [
       new HtmlWebPackPlugin({

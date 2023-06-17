@@ -1,11 +1,10 @@
 import React from 'react';
-class App extends React.Component {
- render() {
+import './app.css';
+
+function App () {
   return(
-   <div>
-    My App Component
-   </div>
-  );
+   <h1 className='text-primary text-4xl font-bold'> My App Component</h1>
+  )
  }
-}
+
 export default App
