@@ -21,7 +21,7 @@ function MainPage () {
     // TODO: Extract to a custom hook
     useEffect(() => {
         if (filter) {
-            const filteredPodcasts = podcasts.filter(podcast => {
+            const filteredPodcasts = initialState.filter(podcast => {
                 return podcast.name.toLowerCase().includes(filter.toLowerCase()) || podcast.artist.toLowerCase().includes(filter.toLowerCase())
             })
             setFilteredPodcasts(filteredPodcasts)
@@ -37,7 +37,7 @@ function MainPage () {
     }
 
     return (
-        <div className='w-4/5 m-auto flex flex-col'>
+        <main className='w-4/5 m-auto flex flex-col'>
             <FilterPodcast handleChangeFilter={handleChangeFilter} />
             <div className='grid grid-cols-4'>
                 {
@@ -62,7 +62,7 @@ function MainPage () {
                     })
                 }
             </div>
-        </div>
+        </main>
     )
 }
 
