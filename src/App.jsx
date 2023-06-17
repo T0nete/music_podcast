@@ -1,11 +1,17 @@
 import React from 'react';
 import './app.css';
+import { Route, Routes } from 'react-router-dom'
+import MainPage from './pages/MainPage'
+import ErrorPage from './pages/ErrorPage'
+import DetailPage from './pages/DetailPage'
 
 function App () {
   return(
-    <div>
-      <h1 className='text-primary text-4xl font-bold'> My App Component</h1>
-    </div>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/podcast/:podcastId" element={<DetailPage />}/>
+      <Route path="*" element={<ErrorPage />} />
+    </Routes>
   )
  }
 
