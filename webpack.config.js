@@ -2,20 +2,26 @@ const HtmlWebPackPlugin = require( 'html-webpack-plugin' );
 const path = require( 'path' );
 module.exports = {
    context: __dirname,
-   entry: './src/index.js',
+   entry: './src/index.jsx',
    output: {
       path: path.resolve( __dirname, 'dist' ),
-      filename: 'main.js',
       publicPath: '/',
+      filename: 'bundle.js',
    },
+   resolve: {
+      alias: {
+          components: path.resolve(__dirname, 'src'),
+      },
+      extensions: ['.js', '.jsx'],
+  },
    devServer: {
-      historyApiFallback: true,
+      // historyApiFallback: true,
       open: true,
    },
    module: {
       rules: [
          {
-            test: /\.js$/,
+            test: /\.js$|jsx/,
             use: 'babel-loader',
          },
          {
