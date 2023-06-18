@@ -34,8 +34,14 @@ export const getPodcastById = async (id) => {
     if (refreshPodcastDetails()) {
         podcast = await fetchMusicPodcastById(id)
         episodes = await fetchEpisodes(podcast.feedUrl)
-        podcast.description = episodes.description
-        podcast.episodes = episodes.episodes
+
+        podcast = {
+            ...podcast,
+            description: episodes.description,
+            episodes: episodes.episodes
+        }
+        localStorage.setItem(`podcastsDate_${id}`, new Date().getTime())
+        localStorage.setItem(`podcast_${id}`, JSON.stringify(podcast))
     } else {
         podcast = JSON.parse(localStorage.getItem(`podcast_${id}`))
     }
@@ -72,7 +78,6 @@ const fetchMusicPodcasts = async () => {
 const fetchMusicPodcastById = async (id) => {
     return client.get(`/lookup?id=${id}`)
         .then(response => {
-            console.log(response.data.results[0])
             if (response.status !== 200) {
                 console.log('Error: ' + response.status)
             }
@@ -84,9 +89,6 @@ const fetchMusicPodcastById = async (id) => {
                 author: artistName,
                 feedUrl: feedUrl
             }
-            localStorage.setItem(`podcastsDate_${id}`, new Date().getTime())
-            localStorage.setItem(`podcast_${id}`, JSON.stringify(podcast))
-
             return podcast
         })
         .catch(error => {
@@ -101,21 +103,52 @@ export const fetchEpisodes = async (feedUrl) => {
             if (response.status !== 200) {
                 console.log('Error: ' + response.status)
             }
-            const json = xml2js(response.data, { compact: true, spaces: 4 });
-            console.log(json.rss.channel)
+            const json = xml2js(response.data, { compact: true, spaces: 4 })
+            const data = json.rss.channel
+
+            // Some of the objects have _cdata and others _text for the same property
+            let descriptionText
+
+            if (data.description && data.description._text) {
+                descriptionText = data.description._text;
+            } else if (data.description && data.description._cdata) {
+                descriptionText = data.description._cdata;
+            } else {
+                descriptionText = 'No description found'
+            }
+
             const detail = {
-                description: json.rss.channel.description._cdata,
-                episodes: json.rss.channel.item.map(episode => {
+                description: descriptionText,
+                episodes: data.item.map(episode => {
+                    let titleText
+                    let durationText
+
+                    // Some of the objects have the property title and others itunes:title for the same property
+                    if (episode.title && episode.title._text) {
+                        titleText = episode.title._text
+                    } else if (episode['itunes:title'] && episode['itunes:title']._text) {
+                        titleText = episode['itunes:title']._text
+                    } else {
+                        titleText = 'No title found'
+                    }
+                    
+                    // Some of the objects have the property itunes:duration and others don't have
+                    if (episode['itunes:duration'] && episode['itunes:duration']._text) {
+                        durationText = episode['itunes:duration']._text
+                    } else {
+                        durationText = '-'
+                    }
+
                     return {
-                        title: episode['itunes:title']._text,
+                        title: titleText,
                         pubDate: episode.pubDate._text,
-                        duration: episode['itunes:duration']._text
+                        duration: durationText
                     }
                 })
             }
             return detail
         })
         .catch(error => {
-            console.log(error)
+            console.log('fetchEpisodes ' + error)
         })
 }

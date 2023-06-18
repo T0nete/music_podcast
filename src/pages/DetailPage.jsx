@@ -17,7 +17,7 @@ function DetailPage () {
     }, [])
 
     return (
-        <div className='w-4/8 m-auto flex flex-row'>
+        <div className='w-4/5 m-auto flex flex-row'>
             <aside>
                 {
                     <PodcastDescription 
