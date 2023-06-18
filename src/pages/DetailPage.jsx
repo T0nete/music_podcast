@@ -1,9 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import PodcastDescription from '../components/PodcastDescription'
+import EpisodeList from '../components/EpisodeList'
+import { getPodcastById } from '../services/useITunes'
 
 function DetailPage () {
+    const { podcastId } = useParams()
+    const [podcastDetail, setPodcastDetail] = useState({})
+    const [numberOfEpisodes, setNumberOfEpisodes] = useState(0)
+
+    // TODO: Extract to a custom hook
+    useEffect(() => {
+        getPodcastById(podcastId)
+            .then(podcast => {
+                setPodcastDetail(podcast)
+                setNumberOfEpisodes(podcast.episodes.length)
+            })
+    }, [])
+
     return (
-        <div>
-            <h1>Detail Page</h1>
+        <div className='w-4/5 m-auto flex flex-row gap-20'>
+            <aside className='w-1/4'>
+                {
+                    <PodcastDescription 
+                        image={podcastDetail.image}  
+                        author={podcastDetail.author}
+                        title={podcastDetail.title}
+                        description={podcastDetail.description}
+                    />
+                }
+            </aside>
+
+            <main className='w-3/4 flex flex-col'>
+                <div className='p-2 flex flex-col shadow-md rounded-md divide-y-2'> 
+                    <h2 className='text-lg font-semibold'>Episodes: <span className='font-bold text-lg'>{numberOfEpisodes}</span> </h2>
+                </div>
+                <EpisodeList podcastDetail={podcastDetail}/>
+            </main>
         </div>
     )
 }
