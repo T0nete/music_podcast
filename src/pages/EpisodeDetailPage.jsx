@@ -6,7 +6,7 @@ function EpisodeDetailPage () {
     const {id, image, title, author, description, episode} = useSelector(state => state.podcast)
 
     return (
-        <div className='flex flex-row w-4/5 m-auto p-2 gap-20'>
+        <div className='flex flex-row w-4/5 m-auto p-4 gap-20'>
             <aside className='w-1/4'> 
                 <PodcastDescription
                     id={id}

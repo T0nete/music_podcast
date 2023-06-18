@@ -1,19 +1,44 @@
 import React from 'react';
 import './app.css';
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import MainPage from './pages/MainPage'
 import DetailPage from './pages/DetailPage'
 import EpisodeDetailPage from './pages/EpisodeDetailPage'
 import ErrorPage from './pages/ErrorPage'
+import Header from './components/Header'
+import { useState } from 'react';
+
 
 function App () {
+  const [isLoading, setIsLoading] = useState(false)
+  const location = useLocation()
+
+  const handlePageLoading = (isLoading) => {
+    setIsLoading(isLoading)
+  }
+
   return(
-    <Routes>
-      <Route path="/" element={<MainPage />} />
-      <Route path="/podcast/:podcastId" element={<DetailPage />}/>
-      <Route path="/podcast/:podcastId/episode/:episodeId" element={<EpisodeDetailPage />}/>
-      <Route path="*" element={<ErrorPage />} />
-    </Routes>
+    <>
+      <Header isLoading={isLoading}/>
+      <Routes location={location}>
+        <Route 
+          path="/" 
+          element={<MainPage isLoading={isLoading} handlePageLoading={handlePageLoading}/>} 
+        />
+        <Route 
+          path="/podcast/:podcastId" 
+          element={<DetailPage isLoading={isLoading} handlePageLoading={handlePageLoading}/>}
+        />
+        <Route 
+          path="/podcast/:podcastId/episode/:episodeId" 
+          element={<EpisodeDetailPage isLoading={isLoading} handlePageLoading={handlePageLoading}/>}
+        />
+        <Route 
+          path="*" 
+          element={<ErrorPage />}
+        />
+      </Routes>
+    </>
   )
  }
 
