@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import getPodcasts  from '../services/useITunes'
+import { getPodcasts }  from '../services/useITunes'
 import PodcastCard from '../components/PodcastCard'
 import FilterPodcast from '../components/FilterPodcast'
 import { Link } from 'react-router-dom'

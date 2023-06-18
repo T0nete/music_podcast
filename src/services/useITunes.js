@@ -1,42 +1,55 @@
 import axios from 'axios'
+import { xml2js } from 'xml-js'
+import { refreshPodcasts, refreshPodcastDetails} from '../utils/utils'
 
 const numberOfPodcast = 100
 const genreId = 1310
 
-
-// console.log(process.env.BASE_API_URL)
+const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
 
 const client = axios.create({
-    baseURL: "https://itunes.apple.com/us/rss/toppodcasts/",
-    timeout: 1000,
+    baseURL: `${CORS_PROXY}https://itunes.apple.com`,
+    // timeout: 1000
 })
 
-const refreshPodcasts = () => {
-    const systemDate = new Date().getTime()
-    const oneDay = 24 * 60 * 60 * 1000
-    const podcastStoredDate = localStorage.getItem('podcastsDate')
-    
-    return (systemDate - podcastStoredDate) > oneDay
-    // return true
-}
-
-const getPodcasts = async () => {
+export const getPodcasts = async () => {
     let podcasts
     const refresh = refreshPodcasts()
     console.log(refresh)
 
     if (refresh) {
-        podcasts = fetchMusicPodcasts()
+        // Get data from the API
+        podcasts = await fetchMusicPodcasts()
     } else {
+        // Get data from localStorage
         podcasts = JSON.parse(localStorage.getItem('podcasts'))
     }
     return podcasts
 }
 
+export const getPodcastById = async (id) => {
+    let podcast
+    let episodes
+
+    if (refreshPodcastDetails()) {
+        podcast = await fetchMusicPodcastById(id)
+        episodes = await fetchEpisodes(podcast.feedUrl)
+        podcast.description = episodes.description
+        podcast.episodes = episodes.episodes
+    } else {
+        podcast = JSON.parse(localStorage.getItem(`podcast_${id}`))
+    }
+    console.log(podcast)
+    return podcast
+}
+
+
 const fetchMusicPodcasts = async () => {
-    console.log('fetching podcasts')
-    return client.get(`limit=${numberOfPodcast}/genre=${genreId}/json`)
+    return client.get(`/us/rss/toppodcasts/limit=${numberOfPodcast}/genre=${genreId}/json`)
         .then(response => {
+            if (response.status !== 200) {
+                console.log('Error: ' + response.status)
+            }
             const podcasts = response.data.feed.entry.map(podcast => {
                 return {
                     id: podcast.id.attributes['im:id'],
@@ -56,4 +69,53 @@ const fetchMusicPodcasts = async () => {
         })
 }
 
-export default getPodcasts 
+const fetchMusicPodcastById = async (id) => {
+    return client.get(`/lookup?id=${id}`)
+        .then(response => {
+            console.log(response.data.results[0])
+            if (response.status !== 200) {
+                console.log('Error: ' + response.status)
+            }
+            const {trackId, artworkUrl100, collectionName, artistName, feedUrl } = response.data.results[0]
+            const podcast = {
+                id: trackId,
+                image: artworkUrl100,
+                title: collectionName,
+                author: artistName,
+                feedUrl: feedUrl
+            }
+            localStorage.setItem(`podcastsDate_${id}`, new Date().getTime())
+            localStorage.setItem(`podcast_${id}`, JSON.stringify(podcast))
+
+            return podcast
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+
+export const fetchEpisodes = async (feedUrl) => {
+    return axios.get(`${feedUrl}`)
+        .then(response => {
+            if (response.status !== 200) {
+                console.log('Error: ' + response.status)
+            }
+            const json = xml2js(response.data, { compact: true, spaces: 4 });
+            console.log(json.rss.channel)
+            const detail = {
+                description: json.rss.channel.description._cdata,
+                episodes: json.rss.channel.item.map(episode => {
+                    return {
+                        title: episode['itunes:title']._text,
+                        pubDate: episode.pubDate._text,
+                        duration: episode['itunes:duration']._text
+                    }
+                })
+            }
+            return detail
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}

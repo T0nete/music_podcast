@@ -1,6 +1,7 @@
-const path = require( 'path' );
-const HtmlWebPackPlugin = require( 'html-webpack-plugin' );
-const Dotenv = require('dotenv-webpack');
+const path = require( 'path' )
+const HtmlWebPackPlugin = require( 'html-webpack-plugin' )
+const Dotenv = require('dotenv-webpack')
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
    context: __dirname,
@@ -15,9 +16,12 @@ module.exports = {
           components: path.resolve(__dirname, 'src'),
       },
       extensions: ['.js', '.jsx'],
+      fallback: {
+         stream: require.resolve('stream-browserify')
+       }
   },
    devServer: {
-      // historyApiFallback: true,
+      historyApiFallback: true,
       open: true,
    },
    module: {
@@ -41,6 +45,7 @@ module.exports = {
          template: path.resolve( __dirname, 'public/index.html' ),
          filename: 'index.html'
       }),
-      new Dotenv()
+      new Dotenv(),
+      new NodePolyfillPlugin()
    ]
 };
