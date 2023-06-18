@@ -5,7 +5,14 @@ const initialState = {
     image: '', 
     title: '', 
     author: '', 
-    description: ''
+    description: '',
+    episode: {
+        id: '',
+        title: '',
+        description: '',
+        audio: '',
+        audioType: '',
+    }
 }
 
 export const podcastSlice = createSlice({
@@ -22,9 +29,23 @@ export const podcastSlice = createSlice({
             state.description = description
 
             return state
+        },
+        addEpisodeAudio: (state, action) => {
+            const {id, title, description, audio, audioType } = action.payload
+
+            return {
+                ...state,
+                episode: {
+                    id: id,
+                    title: title,
+                    description: description,
+                    audio: audio,
+                    audioType: audioType
+                }
+            }
         }
     }
 })
 
 export default podcastSlice.reducer
-export const {setPodcastDetailState} = podcastSlice.actions
+export const {setPodcastDetailState, addEpisodeAudio} = podcastSlice.actions

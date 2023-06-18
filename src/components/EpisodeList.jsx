@@ -1,8 +1,23 @@
 import React from 'react'
 import { formatDateMMDDYYYY } from '../utils/utils'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { addEpisodeAudio } from '../store/podcastSlice'
 
 const EpisodeList = ({ podcastDetail }) => {
+    const dispatch = useDispatch()
+
+    const handleOnClickEpisode = (episode) => {
+        console.log(episode)
+        const globalEpisode = {
+            id: episode.id,
+            title: episode.title,
+            description: episode.description,
+            audio: episode.audio,
+            audioType: episode.audioType,
+        }
+        dispatch(addEpisodeAudio(globalEpisode))
+    }
     return (
         <div className='p-4 flex flex-col shadow-md rounded-md divide-y-2'>
             <div className='flex flex-row justify-between p-2'>
@@ -17,7 +32,10 @@ const EpisodeList = ({ podcastDetail }) => {
                             key={`${episode.id}_${index}`} 
                             className={`flex flex-row justify-between p-2 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'} `}
                         >
-                            <div className='flex flex-col w-8/12'>
+                            <div 
+                                className='flex flex-col w-8/12'
+                                onClick={() =>handleOnClickEpisode(episode)}
+                            >
                                 <Link to={`/podcast/${podcastDetail.id}/episode/${episode.id}`}>
                                     <h3 className='text-start'>{episode.title}</h3>
                                 </Link>

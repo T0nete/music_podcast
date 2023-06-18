@@ -45,6 +45,7 @@ export const getPodcastById = async (id) => {
             description: episodes.description,
             episodes: episodes.episodes
         }
+
         localStorage.setItem(`podcastsDate_${id}`, new Date().getTime())
         localStorage.setItem(`podcast_${id}`, JSON.stringify(podcast))
     } else {
@@ -152,12 +153,15 @@ export const fetchEpisodes = async (feedUrl) => {
                     } else {
                         idText = '-'
                     }
-
+                    
                     return {
                         id: idText,
                         title: titleText,
                         pubDate: episode.pubDate._text,
-                        duration: durationText
+                        duration: durationText,
+                        audio: episode.enclosure._attributes.url,
+                        audioType: episode.enclosure._attributes.type,
+                        description: episode.description._text
                     }
                 })
             }

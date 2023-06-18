@@ -26,6 +26,8 @@ function DetailPage () {
                     author: podcast.author,
                     description: podcast.description
                 }
+
+                console.log(globalPodcast)
                 dispatch(setPodcastDetailState(globalPodcast))
             })
     }, [])
