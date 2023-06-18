@@ -11,9 +11,9 @@ const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
 const client = axios.create({
     baseURL: `${CORS_PROXY}https://itunes.apple.com`,
     // timeout: 1000
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-    }
+    // headers: {
+    //     'Access-Control-Allow-Origin': '*',
+    // }
 
 })
 
@@ -36,7 +36,8 @@ export const getPodcastById = async (id) => {
     let podcast
     let episodes
 
-    if (refreshPodcastDetails()) {
+    if (refreshPodcastDetails(id)) {
+        console.log('refreshPodcastDetails ' + refreshPodcastDetails())
         podcast = await fetchMusicPodcastById(id)
         episodes = await fetchEpisodes(podcast.feedUrl)
 
@@ -45,12 +46,12 @@ export const getPodcastById = async (id) => {
             description: episodes.description,
             episodes: episodes.episodes
         }
+
         localStorage.setItem(`podcastsDate_${id}`, new Date().getTime())
         localStorage.setItem(`podcast_${id}`, JSON.stringify(podcast))
     } else {
         podcast = JSON.parse(localStorage.getItem(`podcast_${id}`))
     }
-    console.log(podcast)
     return podcast
 }
 
@@ -86,7 +87,6 @@ const fetchMusicPodcastById = async (id) => {
             if (response.status !== 200) {
                 console.log('Error: ' + response.status)
             }
-            console.log(response.data.results[0])
             const {trackId, artworkUrl600, collectionName, artistName, feedUrl } = response.data.results[0]
             const podcast = {
                 id: trackId,
@@ -112,49 +112,45 @@ export const fetchEpisodes = async (feedUrl) => {
             const json = xml2js(response.data, { compact: true, spaces: 4 })
             const data = json.rss.channel
 
-            // Some of the objects have _cdata and others _text for the same property
-            let descriptionText
+            // Some of the objects have _cdata and others _text for the same property                  
+            const descriptionPodcast = data.description?._text || data['itunes:summary']?._text ||  data.description?._cdata || data['itunes:summary']?._cdata || 'No description found'
+            // console.log(data.item)
 
-            if (data.description && data.description._text) {
-                descriptionText = data.description._text;
-            } else if (data.description && data.description._cdata) {
-                descriptionText = data.description._cdata;
+            let episodes = []
+            // Validate if the data.item is an array or an object
+            if (Array.isArray(data.item)) {
+                episodes = data.item.map(episode => {
+                    return getEpisodeData(episode)
+                })
             } else {
-                descriptionText = 'No description found'
+                episodes = [getEpisodeData(data.item)]
             }
 
             const detail = {
-                description: descriptionText,
-                episodes: data.item.map(episode => {
-                    let titleText
-                    let durationText
-
-                    // Some of the objects have the property title and others itunes:title for the same property
-                    if (episode.title && episode.title._text) {
-                        titleText = episode.title._text
-                    } else if (episode['itunes:title'] && episode['itunes:title']._text) {
-                        titleText = episode['itunes:title']._text
-                    } else {
-                        titleText = 'No title found'
-                    }
-                    
-                    // Some of the objects have the property itunes:duration and others don't have
-                    if (episode['itunes:duration'] && episode['itunes:duration']._text) {
-                        durationText = episode['itunes:duration']._text
-                    } else {
-                        durationText = '-'
-                    }
-
-                    return {
-                        title: titleText,
-                        pubDate: episode.pubDate._text,
-                        duration: durationText
-                    }
-                })
+                description: descriptionPodcast,
+                episodes: episodes
             }
             return detail
         })
         .catch(error => {
             console.log('fetchEpisodes ' + error)
         })
+}
+
+const getEpisodeData = (episode) => {
+    // Some of the objects have _cdata and others _text for the same property or even different name of propperty  
+    const titleText = episode.title?._text || episode['itunes:title']?._text || episode.title?._cdata || episode['itunes:title']?._cdata || 'No title found'
+    const durationText = episode['itunes:duration']?._text || '-'
+    const idText = episode.guid?._text || episode.guid?._cdata || '-'
+    const descriptionText = episode.description?._text || episode.description?._cdata || 'No description found'
+
+    return {
+        id: idText,
+        title: titleText,
+        pubDate: episode.pubDate._text,
+        duration: durationText,
+        audio: episode.enclosure._attributes.url,
+        audioType: episode.enclosure._attributes.type,
+        description: descriptionText
+    }
 }

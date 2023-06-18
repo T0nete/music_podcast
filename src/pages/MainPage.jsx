@@ -41,7 +41,7 @@ function MainPage () {
             <FilterPodcast handleChangeFilter={handleChangeFilter} />
             <div className='grid grid-cols-4'>
                 {
-                    filteredPodcasts.map(podcast => {
+                    filteredPodcasts && filteredPodcasts.map(podcast => {
                         return (
                             <div 
                                 key={podcast.id}
