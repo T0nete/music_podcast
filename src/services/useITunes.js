@@ -11,9 +11,9 @@ const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
 const client = axios.create({
     baseURL: `${CORS_PROXY}https://itunes.apple.com`,
     // timeout: 1000
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-    }
+    // headers: {
+    //     'Access-Control-Allow-Origin': '*',
+    // }
 
 })
 
@@ -50,7 +50,6 @@ export const getPodcastById = async (id) => {
     } else {
         podcast = JSON.parse(localStorage.getItem(`podcast_${id}`))
     }
-    console.log(podcast)
     return podcast
 }
 
@@ -86,7 +85,6 @@ const fetchMusicPodcastById = async (id) => {
             if (response.status !== 200) {
                 console.log('Error: ' + response.status)
             }
-            console.log(response.data.results[0])
             const {trackId, artworkUrl600, collectionName, artistName, feedUrl } = response.data.results[0]
             const podcast = {
                 id: trackId,
@@ -111,6 +109,7 @@ export const fetchEpisodes = async (feedUrl) => {
             }
             const json = xml2js(response.data, { compact: true, spaces: 4 })
             const data = json.rss.channel
+            console.log(data)
 
             // Some of the objects have _cdata and others _text for the same property
             let descriptionText
@@ -128,6 +127,7 @@ export const fetchEpisodes = async (feedUrl) => {
                 episodes: data.item.map(episode => {
                     let titleText
                     let durationText
+                    let idText
 
                     // Some of the objects have the property title and others itunes:title for the same property
                     if (episode.title && episode.title._text) {
@@ -145,7 +145,16 @@ export const fetchEpisodes = async (feedUrl) => {
                         durationText = '-'
                     }
 
+                    if (episode.guid && episode.guid._text) {
+                        idText = episode.guid._text
+                    } else if (episode.guid && episode.guid._cdata) {
+                        idText = episode.guid._cdata
+                    } else {
+                        idText = '-'
+                    }
+
                     return {
+                        id: idText,
                         title: titleText,
                         pubDate: episode.pubDate._text,
                         duration: durationText
