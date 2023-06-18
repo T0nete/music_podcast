@@ -6,10 +6,15 @@ const numberOfPodcast = 100
 const genreId = 1310
 
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
+// const CORS_PROXY = "https://api.allorigins.win/get?"
 
 const client = axios.create({
     baseURL: `${CORS_PROXY}https://itunes.apple.com`,
     // timeout: 1000
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+    }
+
 })
 
 export const getPodcasts = async () => {
@@ -81,10 +86,11 @@ const fetchMusicPodcastById = async (id) => {
             if (response.status !== 200) {
                 console.log('Error: ' + response.status)
             }
-            const {trackId, artworkUrl100, collectionName, artistName, feedUrl } = response.data.results[0]
+            console.log(response.data.results[0])
+            const {trackId, artworkUrl600, collectionName, artistName, feedUrl } = response.data.results[0]
             const podcast = {
                 id: trackId,
-                image: artworkUrl100,
+                image: artworkUrl600,
                 title: collectionName,
                 author: artistName,
                 feedUrl: feedUrl
