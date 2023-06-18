@@ -3,12 +3,13 @@ import {useSelector} from 'react-redux'
 import PodcastDescription from '../components/PodcastDescription'
 
 function EpisodeDetailPage () {
-    const {image, title, author, description} = useSelector(state => state.podcast)
+    const {id, image, title, author, description} = useSelector(state => state.podcast)
 
     return (
         <div className='flex flex-row'>
             <aside> 
                 <PodcastDescription
+                    id={id}
                     image={image}  
                     author={author}
                     title={title}

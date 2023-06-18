@@ -20,6 +20,7 @@ function DetailPage () {
                 setNumberOfEpisodes(podcast.episodes.length)
 
                 const globalPodcast = {
+                    id: podcast.id,
                     image: podcast.image,
                     title: podcast.title,
                     author: podcast.author,
@@ -34,6 +35,7 @@ function DetailPage () {
             <aside className='w-1/4'>
                 {
                     <PodcastDescription 
+                        id={podcastDetail.id}
                         image={podcastDetail.image}  
                         author={podcastDetail.author}
                         title={podcastDetail.title}
