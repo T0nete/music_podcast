@@ -6,8 +6,8 @@ function EpisodeDetailPage () {
     const {id, image, title, author, description} = useSelector(state => state.podcast)
 
     return (
-        <div className='flex flex-row'>
-            <aside> 
+        <div className='flex flex-row w-4/5 m-auto'>
+            <aside className='w-1/4'> 
                 <PodcastDescription
                     id={id}
                     image={image}  
@@ -16,8 +16,12 @@ function EpisodeDetailPage () {
                     description={description}
                 />
             </aside>
-            <main>
-                <h1>{title}</h1>
+            <main className='w-3/4 flex flex-col'>
+                <div className='p-2 flex flex-col shadow-md rounded-md'>
+                    <h1>{title}</h1>
+                    <div dangerouslySetInnerHTML={{ __html: description }} />
+                    
+                </div>
             </main>
         </div>
     )

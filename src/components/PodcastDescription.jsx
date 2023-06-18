@@ -16,7 +16,7 @@ const PodcastDescription = ({id, image, title, author, description}) => {
                     <h3 className='font-semibold'>{title}</h3>
                     <p>by {author}</p>
                 </div>
-                <div className='flex flex-col p-2'>
+                <div className='flex flex-col p-2 text-justify'>
                     <p className='font-semibold'>Description:</p>
                     <p>{description}</p>
                 </div>
