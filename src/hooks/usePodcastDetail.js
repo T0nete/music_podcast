@@ -27,6 +27,7 @@ export const usePodcastDetail = (podcastId) => {
                 dispatch(setPodcastDetailState(globalPodcast))
                 setErrorPodcastDetail('')
             } catch (error) {
+                console.log(error)
                 setErrorPodcastDetail(error.message)
             } finally {
                 setLoadingPodcastDetail(false)

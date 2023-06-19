@@ -18,37 +18,35 @@ function MainPage ({isLoading, handlePageLoading}) {
     return (
         <main className='w-4/5 m-auto  p-4'>
             {
-                errorPodcast !== '' && 
-                    <h1>{podcastError}</h1>
-            }
-            {
-                !isLoading && 
-                    <div className='flex flex-col'>
-                        <FilterPodcast handleChangeFilter={handleChangeFilter} />
-                        <div className='grid grid-cols-4'>
-                            {
-                                filteredPodcasts && filteredPodcasts.map(podcast => {
-                                    return (
-                                        <div 
-                                            key={podcast.id}
-                                            className='h-full w-full p-4 items-center justify-center flex flex-col'    
-                                        >
-                                            <img 
-                                                src={podcast.img} 
-                                                alt='podcast cover'
-                                                className='h-32 w-32 rounded-full'
-                                            />
-                                            <div  className='w-full'>
-                                                <Link to={`/podcast/${podcast.id}`}>
-                                                    <PodcastCard podcast={podcast} />
-                                                </Link>
-                                            </div>
+                errorPodcast 
+                ? <h1>{podcastError}</h1>
+                : !isLoading && 
+                <div className='flex flex-col'>
+                    <FilterPodcast handleChangeFilter={handleChangeFilter} />
+                    <div className='grid grid-cols-4'>
+                        {
+                            filteredPodcasts && filteredPodcasts.map(podcast => {
+                                return (
+                                    <div 
+                                        key={podcast.id}
+                                        className='h-full w-full p-4 items-center justify-center flex flex-col'    
+                                    >
+                                        <img 
+                                            src={podcast.img} 
+                                            alt='podcast cover'
+                                            className='h-32 w-32 rounded-full'
+                                        />
+                                        <div  className='w-full'>
+                                            <Link to={`/podcast/${podcast.id}`}>
+                                                <PodcastCard podcast={podcast} />
+                                            </Link>
                                         </div>
-                                    )
-                                })
-                            }
-                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
+                </div>
             }
         </main>
     )

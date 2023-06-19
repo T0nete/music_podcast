@@ -13,6 +13,7 @@ function App () {
   const [isLoading, setIsLoading] = useState(false)
   const location = useLocation()
 
+  // Another option could be to have loading as a global state
   const handlePageLoading = (isLoading) => {
     setIsLoading(isLoading)
   }

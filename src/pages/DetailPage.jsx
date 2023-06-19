@@ -15,7 +15,9 @@ function DetailPage ({ isLoading, handlePageLoading }) {
     return (
         <div className='w-4/5 m-auto p-4'>
             {
-                !isLoading && (
+                errorPodcastDetail 
+                ? <h1>{errorPodcastDetail}</h1>
+                : !isLoading &&
                     <div className='flex flex-row gap-20'>
                         <aside className='w-1/4'>
                             {
@@ -37,7 +39,7 @@ function DetailPage ({ isLoading, handlePageLoading }) {
                             </div>
                         </main>
                     </div>
-                )
+                
             }
         </div>
     )
