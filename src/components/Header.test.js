@@ -1,8 +1,8 @@
+import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
-import { Provider, useDispatch } from 'react-redux'
+import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { store } from '../store/index'
-import '@testing-library/jest-dom/extend-expect'
 import Header from './Header';
 import { configureStore } from '@reduxjs/toolkit';
 import { setLoadingState } from '../store/loadingSlice'
@@ -20,7 +20,7 @@ describe('Header', () => {
 
     const titleElement = screen.getByText('Podcaster');
     expect(titleElement).toBeInTheDocument();
-  });
+  })
 
   test('renders Header component with spinner', () => {
     // Set loading state to true
@@ -52,7 +52,7 @@ describe('Header', () => {
     render(
       <Provider store={testStore}>
         <Router>
-          <Header />
+            <Header />
         </Router>
       </Provider>
     )
