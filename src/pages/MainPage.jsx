@@ -1,49 +1,26 @@
 import React, { useEffect } from 'react'
-import { getPodcasts }  from '../services/useITunes'
 import PodcastCard from '../components/PodcastCard'
 import FilterPodcast from '../components/FilterPodcast'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { usePodcast } from '../hooks/usePodcast'
 
 function MainPage ({isLoading, handlePageLoading}) {
-    const [initialState, setInitialState] = useState([])
-    const [filteredPodcasts, setFilteredPodcasts] = useState([])
-    const [filter, setFilter] = React.useState('')
+    const {filteredPodcasts, errorPodcast, loadingPodcast, setFilter} = usePodcast(handlePageLoading)
+
+    useEffect(() => {
+        handlePageLoading(loadingPodcast)
+    }, [loadingPodcast])
     
-    // TODO: Extract to a custom hook
-    useEffect(() => {
-        handlePageLoading(true)
-        console.log('MainPage isLoading ' + isLoading)
-        getPodcasts()
-            .then(podcasts => {
-                setInitialState(podcasts)
-                setFilteredPodcasts(podcasts)
-            })
-            .finally(() => {
-                handlePageLoading(false)
-            })
-    }, [])
-
-    // TODO: Extract to a custom hook
-    useEffect(() => {
-        if (filter) {
-            const filteredPodcasts = initialState.filter(podcast => {
-                return podcast.name.toLowerCase().includes(filter.toLowerCase()) || podcast.artist.toLowerCase().includes(filter.toLowerCase())
-            })
-            setFilteredPodcasts(filteredPodcasts)
-        } else {
-            setFilteredPodcasts(initialState)
-        }
-    }, [filter])
-
-
     const handleChangeFilter = (value) => {
-        console.log(value)
         setFilter(value)
     }
 
     return (
         <main className='w-4/5 m-auto  p-4'>
+            {
+                errorPodcast !== '' && 
+                    <h1>{podcastError}</h1>
+            }
             {
                 !isLoading && 
                     <div className='flex flex-col'>

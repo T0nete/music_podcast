@@ -1,40 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { setPodcastDetailState } from '../store/podcastSlice'
 import PodcastDescription from '../components/PodcastDescription'
 import EpisodeList from '../components/EpisodeList'
-import { getPodcastById } from '../services/useITunes'
+import { usePodcastDetail } from '../hooks/usePodcastDetail'
 
 function DetailPage ({ isLoading, handlePageLoading }) {
     const { podcastId } = useParams()
-    const [podcastDetail, setPodcastDetail] = useState({})
-    const [numberOfEpisodes, setNumberOfEpisodes] = useState(0)
-    const dispatch = useDispatch()
+    const {podcastDetail, numberOfEpisodes, loadingPodcastDetail, errorPodcastDetail} = usePodcastDetail(podcastId, handlePageLoading)
 
-    // TODO: Extract to a custom hook
     useEffect(() => {
-        console.log('detailpage')
-        handlePageLoading(true)
-        getPodcastById(podcastId)
-            .then(podcast => {
-                setPodcastDetail(podcast)
-                setNumberOfEpisodes(podcast.episodes.length)
-
-                const globalPodcast = {
-                    id: podcast.id,
-                    image: podcast.image,
-                    title: podcast.title,
-                    author: podcast.author,
-                    description: podcast.description
-                }
-
-                console.log(globalPodcast)
-                dispatch(setPodcastDetailState(globalPodcast))
-            }).finally(() => {
-                handlePageLoading(false)
-            })
-    }, [])
+        handlePageLoading(loadingPodcastDetail)
+    }, [loadingPodcastDetail])
 
     return (
         <div className='w-4/5 m-auto p-4'>
