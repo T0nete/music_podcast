@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const PodcastDescription = ({id, image, title, author, description}) => {
     return (
         <Link to={`/podcast/${id}`} className='text-center'>
-            <div className='p-4 flex flex-col shadow-md rounded-md divide-y-2'>
+            <div role="podcastDescription" className='p-4 flex flex-col shadow-md rounded-md divide-y-2'>
                 <div  className='p-2 justify-center mx-auto '>
                     <img 
                         src={image} 
