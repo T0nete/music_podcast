@@ -1,24 +1,29 @@
 import { useEffect, useState } from 'react'
 import { getPodcasts } from '../services/useITunes'
+import {setLoadingState} from '../store/loadingSlice'
+import { useDispatch } from 'react-redux'
 
 export const usePodcast = () => {
+    const dispatch = useDispatch()
+
     const [initialState, setInitialState] = useState([])
     const [filteredPodcasts, setFilteredPodcasts] = useState([])
     const [filter, setFilter] = useState('')
-    const [loadingPodcast, setLoadingPodcast] = useState(false)
+    // const [loadingPodcast, setLoadingPodcast] = useState(false)
     const [errorPodcast, setErrorPodcast] = useState('')
 
     useEffect(() => {
         const fetchPodcast = async () => {
             try {
-                setLoadingPodcast(true)
+                dispatch(setLoadingState(true))
                 const podcasts = await getPodcasts()
                 setInitialState(podcasts)
                 setFilteredPodcasts(podcasts)
             } catch (error) {
                 setErrorPodcast(error.message)
             } finally {
-                setLoadingPodcast(false)
+                dispatch(setLoadingState(false))
+
             }
         }
 
@@ -36,5 +41,5 @@ export const usePodcast = () => {
         }
     }, [filter])
 
-    return {filteredPodcasts, errorPodcast, loadingPodcast, setFilter}
+    return {filteredPodcasts, errorPodcast, setFilter}
 }

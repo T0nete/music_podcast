@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PodcastCard from '../components/PodcastCard'
 import FilterPodcast from '../components/FilterPodcast'
 import { Link } from 'react-router-dom'
 import { usePodcast } from '../hooks/usePodcast'
+import { useSelector } from 'react-redux'
 
-function MainPage ({isLoading, handlePageLoading}) {
-    const {filteredPodcasts, errorPodcast, loadingPodcast, setFilter} = usePodcast(handlePageLoading)
-
-    useEffect(() => {
-        handlePageLoading(loadingPodcast)
-    }, [loadingPodcast])
+function MainPage () {
+    const {filteredPodcasts, errorPodcast, setFilter} = usePodcast()
+    const isLoading = useSelector(state => state.loading)
     
     const handleChangeFilter = (value) => {
         setFilter(value)
@@ -17,6 +15,9 @@ function MainPage ({isLoading, handlePageLoading}) {
 
     return (
         <main className='w-4/5 m-auto  p-4'>
+            {
+                console.log(isLoading)
+            }
             {
                 errorPodcast 
                 ? <h1>{podcastError}</h1>

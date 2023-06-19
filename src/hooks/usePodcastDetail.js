@@ -2,18 +2,19 @@ import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { getPodcastById } from "../services/useITunes"
 import { setPodcastDetailState } from "../store/podcastSlice"
+import {setLoadingState} from '../store/loadingSlice'
 
 export const usePodcastDetail = (podcastId) => {
     const dispatch = useDispatch()
+
     const [podcastDetail, setPodcastDetail] = useState({})
     const [numberOfEpisodes, setNumberOfEpisodes] = useState(0)
-    const [loadingPodcastDetail, setLoadingPodcastDetail] = useState(false)
     const [errorPodcastDetail, setErrorPodcastDetail] = useState('')
 
     useEffect(() => {
         const fetchPodcastDetail = async () => {
             try {
-                setLoadingPodcastDetail(true)
+                dispatch(setLoadingState(true))
                 const podcast = await getPodcastById(podcastId)
                 setPodcastDetail(podcast)
                 setNumberOfEpisodes(podcast.episodes.length)
@@ -27,15 +28,14 @@ export const usePodcastDetail = (podcastId) => {
                 dispatch(setPodcastDetailState(globalPodcast))
                 setErrorPodcastDetail('')
             } catch (error) {
-                console.log(error)
                 setErrorPodcastDetail(error.message)
             } finally {
-                setLoadingPodcastDetail(false)
+                dispatch(setLoadingState(false))
             }
         }
         
         fetchPodcastDetail()
     }, [])
 
-    return { podcastDetail, numberOfEpisodes, loadingPodcastDetail, errorPodcastDetail}
+    return { podcastDetail, numberOfEpisodes, errorPodcastDetail}
 }

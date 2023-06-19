@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import PodcastDescription from '../components/PodcastDescription'
 import EpisodeList from '../components/EpisodeList'
 import { usePodcastDetail } from '../hooks/usePodcastDetail'
+import { useSelector } from 'react-redux'
 
-function DetailPage ({ isLoading, handlePageLoading }) {
+function DetailPage () {
     const { podcastId } = useParams()
-    const {podcastDetail, numberOfEpisodes, loadingPodcastDetail, errorPodcastDetail} = usePodcastDetail(podcastId, handlePageLoading)
-
-    useEffect(() => {
-        handlePageLoading(loadingPodcastDetail)
-    }, [loadingPodcastDetail])
+    const {podcastDetail, numberOfEpisodes, errorPodcastDetail} = usePodcastDetail(podcastId)
+    const isLoading = useSelector(state => state.loading)
 
     return (
         <div className='w-4/5 m-auto p-4'>
