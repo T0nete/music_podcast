@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux"
 import { getPodcastById } from "../services/useITunes"
 import { setPodcastDetailState } from "../store/podcastSlice"
 
-export const usePodcastDetail = (podcastId, handlePageLoading) => {
+export const usePodcastDetail = (podcastId) => {
     const dispatch = useDispatch()
     const [podcastDetail, setPodcastDetail] = useState({})
     const [numberOfEpisodes, setNumberOfEpisodes] = useState(0)

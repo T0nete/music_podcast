@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getPodcasts } from '../services/useITunes'
 
-export const usePodcast = ({handlePageLoading}) => {
+export const usePodcast = () => {
     const [initialState, setInitialState] = useState([])
     const [filteredPodcasts, setFilteredPodcasts] = useState([])
     const [filter, setFilter] = useState('')
