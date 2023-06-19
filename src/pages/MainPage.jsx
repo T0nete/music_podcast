@@ -11,11 +11,12 @@ function MainPage () {
     
     const handleChangeFilter = useCallback((value) => {
         setFilter(value)
-      }, [setFilter])
+    }, [setFilter])
 
     return (
         <main className='w-4/5 m-auto  p-4'>
             {
+                // In case of error we show the error message, otherwise we show the podcasts list if it is loaded
                 errorPodcast 
                 ? <h1>{podcastError}</h1>
                 : !isLoading && 

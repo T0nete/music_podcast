@@ -12,12 +12,25 @@ export const usePodcastDetail = (podcastId) => {
     const [errorPodcastDetail, setErrorPodcastDetail] = useState('')
 
     useEffect(() => {
+        // Fetch podcast detail
         const fetchPodcastDetail = async () => {
             try {
+                // Clear the error
+                setErrorPodcastDetail('')
+
+                // Update loading state
                 dispatch(setLoadingState(true))
+
                 const podcast = await getPodcastById(podcastId)
                 setPodcastDetail(podcast)
-                setNumberOfEpisodes(podcast.episodes.length)
+
+                if (podcast.episodes !== undefined) {
+                    setNumberOfEpisodes(podcast.episodes.length)
+                } else {
+                    setNumberOfEpisodes(0)
+                }
+
+                // Save podcast detail to global state
                 const globalPodcast = {
                   id: podcast.id,
                   image: podcast.image,
@@ -26,10 +39,11 @@ export const usePodcastDetail = (podcastId) => {
                   description: podcast.description,
                 }
                 dispatch(setPodcastDetailState(globalPodcast))
-                setErrorPodcastDetail('')
             } catch (error) {
+                console.log(error.message)
                 setErrorPodcastDetail(error.message)
             } finally {
+                // Update loading state
                 dispatch(setLoadingState(false))
             }
         }

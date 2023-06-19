@@ -16,6 +16,7 @@ export const refreshPodcastDetails = (id) => {
     return (systemDate - podcastStoredDate) > oneDay
 }
 
+// Format date to MM/DD/YYYY
 export const formatDateMMDDYYYY = (date) => {
     const newDate = new Date(date)
     const month = newDate.getMonth() + 1

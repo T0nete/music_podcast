@@ -13,12 +13,13 @@ const PodcastDescription = ({id, image, title, author, description}) => {
                     />
                 </div>
                 <div className='flex flex-col p-2'>
-                    <h3 className='font-semibold'>{title}</h3>
-                    <p>by {author}</p>
+                    <h3 className='font-semibold text-start'>{title}</h3>
+                    <p className='text-start'>by {author}</p>
                 </div>
                 <div className='flex flex-col p-2 text-justify'>
-                    <p className='font-semibold'>Description:</p>
-                    <p>{description}</p>
+                    <p className='font-semibold truncate'>Description:</p>
+                    {/* Some descriptions have html tags, so we use dangerouslySetInnerHTML to render them */}
+                    <div dangerouslySetInnerHTML={{ __html: description }} />
                 </div>
             </div>
         </Link>

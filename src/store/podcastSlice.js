@@ -20,6 +20,7 @@ export const podcastSlice = createSlice({
     initialState,
     reducers: {
         setPodcastDetailState: (state, action) => {
+            // Save the podcast data to the state
             const {id, image, title, author, description} = action.payload
             
             state.id = id
@@ -31,6 +32,7 @@ export const podcastSlice = createSlice({
             return state
         },
         addEpisodeAudio: (state, action) => {
+            // Add the episode audio to the state
             const {id, title, description, audio, audioType } = action.payload
 
             return {
