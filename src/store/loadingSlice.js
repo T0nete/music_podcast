@@ -7,10 +7,11 @@ export const loadingSlice = createSlice({
     initialState,
     reducers: {
         setLoadingState: (state, action) => {
+            // Update loading state
             return action.payload
         }
     }
 })
 
 export default loadingSlice.reducer
-export const {setLoadingState} = loadingSlice.actions
+export const { setLoadingState } = loadingSlice.actions

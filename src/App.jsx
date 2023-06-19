@@ -1,16 +1,14 @@
 import React from 'react';
 import './app.css';
+
 import { Route, Routes, useLocation } from 'react-router-dom'
 import MainPage from './pages/MainPage'
 import DetailPage from './pages/DetailPage'
 import EpisodeDetailPage from './pages/EpisodeDetailPage'
 import ErrorPage from './pages/ErrorPage'
 import Header from './components/Header'
-import { useState } from 'react'
-
 
 function App () {
-  const [isLoading, setIsLoading] = useState(false)
   const location = useLocation()
 
   return(
@@ -21,7 +19,7 @@ function App () {
           path="/" 
           element={<MainPage />} 
         />
-        {/* DetailPage and EpisodeDetail could be in one component wiht conditional rendering*/}
+        {/* DetailPage and EpisodeDetail could be in one component wiht conditional rendering as they share component */}
         <Route 
           path="/podcast/:podcastId" 
           element={<DetailPage />}
@@ -30,10 +28,10 @@ function App () {
           path="/podcast/:podcastId/episode/:episodeId" 
           element={<EpisodeDetailPage />}
         />
-        <Route 
+        {/* <Route 
           path="*" 
           element={<ErrorPage />}
-        />
+        /> */}
       </Routes>
     </>
   )

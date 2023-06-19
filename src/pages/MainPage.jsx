@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PodcastCard from '../components/PodcastCard'
 import FilterPodcast from '../components/FilterPodcast'
 import { Link } from 'react-router-dom'
@@ -9,16 +9,14 @@ function MainPage () {
     const {filteredPodcasts, errorPodcast, setFilter} = usePodcast()
     const isLoading = useSelector(state => state.loading)
     
-    const handleChangeFilter = (value) => {
+    const handleChangeFilter = useCallback((value) => {
         setFilter(value)
-    }
+    }, [setFilter])
 
     return (
         <main className='w-4/5 m-auto  p-4'>
             {
-                console.log(isLoading)
-            }
-            {
+                // In case of error we show the error message, otherwise we show the podcasts list if it is loaded
                 errorPodcast 
                 ? <h1>{podcastError}</h1>
                 : !isLoading && 
