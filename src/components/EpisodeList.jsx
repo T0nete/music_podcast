@@ -23,6 +23,7 @@ const EpisodeList = ({ podcastDetail }) => {
         dispatch(addEpisodeAudio(globalEpisode))
         dispatch(setLoadingState(false))
     }
+    
     return (
         <div className='p-4 flex flex-col shadow-md rounded-md divide-y-2'>
             <div className='flex flex-row justify-between p-2'>
