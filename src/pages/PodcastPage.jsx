@@ -3,8 +3,8 @@ import { useParams, useLocation } from 'react-router-dom'
 import PodcastDescription from '../components/PodcastDescription'
 import { usePodcastDetail } from '../hooks/usePodcastDetail'
 import { useSelector } from 'react-redux'
-import DetailPage from './DetailPage'
-import EpisodeDetailPage from './EpisodeDetailPage'
+import DetailPodcast from '../components/DetailPodcast'
+import EpisodeDetail from '../components/EpisodeDetail'
 
 function PodcastPage () {
     const location = useLocation()
@@ -23,11 +23,10 @@ function PodcastPage () {
                             <PodcastDescription  {...podcastDetail} />
                         </aside>
                         <main className='w-3/4 py-2flex flex-col'>
-                            {console.log(location.pathname)}
                             {
                                 location.pathname === `/podcast/${podcastId}`
-                                ? <DetailPage numberOfEpisodes={numberOfEpisodes} podcastDetail={podcastDetail}/>
-                                : <EpisodeDetailPage />
+                                ? <DetailPodcast numberOfEpisodes={numberOfEpisodes} podcastDetail={podcastDetail}/>
+                                : <EpisodeDetail />
                             }
                         </main>
                     </div>
