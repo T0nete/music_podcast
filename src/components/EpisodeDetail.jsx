@@ -1,19 +1,19 @@
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-function EpisodeDetailPage () {
-    const {episode} = useSelector(state => state.podcast)
+function EpisodeDetail () {
+    const { episode } = useSelector(state => state.podcast)
 
     return (
-        <div className='p-2 flex flex-col shadow-md rounded-md'>
+        <div role="episodeDetail" className='p-2 flex flex-col shadow-md rounded-md'>
             <h1>{episode.title}</h1>
             {/* Some descriptions have html tags, so we use dangerouslySetInnerHTML to render them */}
             <div dangerouslySetInnerHTML={{ __html: episode.description }} />
-            <audio controls className='w-full p-2'>
+            <audio role="audio" controls className='w-full p-2'>
                 <source src={episode.audio} type={episode.audioType} />
             </audio>
         </div>
     )
 }
 
-export default EpisodeDetailPage
+export default EpisodeDetail
