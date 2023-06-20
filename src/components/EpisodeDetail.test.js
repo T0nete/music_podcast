@@ -101,6 +101,5 @@ describe('EpisodeDetail', () => {
 
         const audioElement = screen.getByRole('audio')
         expect(audioElement).toBeInTheDocument()
-        console.log(audioElement)
     })
 })
