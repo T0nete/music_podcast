@@ -1,7 +1,7 @@
 import React from 'react'
 import EpisodeList from './EpisodeList'
 
-function DetailPage ({numberOfEpisodes, podcastDetail}) {
+function DetailPodcast ({numberOfEpisodes, podcastDetail}) {
     return (
         <div className='detailPage'>
             <div className='p-2 flex flex-col shadow-md rounded-md divide-y-2'> 
@@ -13,4 +13,4 @@ function DetailPage ({numberOfEpisodes, podcastDetail}) {
         </div>
     )
 }
-export default DetailPage
+export default DetailPodcast

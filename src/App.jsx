@@ -3,7 +3,6 @@ import './app.css';
 
 import { Route, Routes } from 'react-router-dom'
 import MainPage from './pages/MainPage'
-// import EpisodeDetailPage from './pages/EpisodeDetailPage'
 import ErrorPage from './pages/ErrorPage'
 import Header from './components/Header'
 import PodcastPage from './pages/PodcastPage';
