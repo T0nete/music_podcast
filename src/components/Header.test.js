@@ -60,4 +60,4 @@ describe('Header', () => {
     const spinnerElement = screen.queryByRole('status')
     expect(spinnerElement).toBeNull()
   })
-});
+})

@@ -38,6 +38,7 @@ export const usePodcastDetail = (podcastId) => {
                   author: podcast.author,
                   description: podcast.description,
                 }
+                console.log(globalPodcast)
                 dispatch(setPodcastDetailState(globalPodcast))
             } catch (error) {
                 console.log(error.message)
