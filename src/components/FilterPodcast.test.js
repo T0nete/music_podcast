@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { BrowserRouter as Router } from 'react-router-dom'
 import FilterPodcast from './FilterPodcast'
 
 describe('FilterPodcast', () => {
