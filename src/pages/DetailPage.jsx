@@ -19,13 +19,7 @@ function DetailPage () {
                     <div className='flex flex-row gap-20'>
                         <aside className='w-1/4'>
                             {
-                                <PodcastDescription 
-                                    id={podcastDetail.id}
-                                    image={podcastDetail.image}  
-                                    author={podcastDetail.author}
-                                    title={podcastDetail.title}
-                                    description={podcastDetail.description}
-                                />
+                                <PodcastDescription {...podcastDetail} />
                             }
                         </aside>
                         <main className='w-3/4 py-2flex flex-col'>

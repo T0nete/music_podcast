@@ -2,7 +2,7 @@ import React from 'react'
 
 const FilterPodcast = ({handleChangeFilter}) => {
     return (
-        <div className="justify-end flex flex-row items-center gap-2">
+        <div role="filterPodcast" className="justify-end flex flex-row items-center gap-2">
             <div className="bg-blue-500 p-1 rounded-lg">
                 <p className="font-bold text-white ">100</p>
             </div>
